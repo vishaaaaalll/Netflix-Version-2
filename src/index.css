@@ -316,7 +316,7 @@ html.dark .button-glass, html.dark .button-outline { color: var(--rose); }
 .chapter-marker i { display: none; }
 .chapter-line { display: none; }
 .chapter-content { grid-column: 1; grid-row: 1; background: var(--surface); border: 1px solid var(--border-soft); border-radius: 24px; padding: 34px 36px; box-shadow: var(--card-shadow); margin-right: 8px; animation: rise 0.6s ease-out both; }
-.chapter:nth-child(even of .chapter) .chapter-content { grid-column: 3; margin-right: 0; margin-left: 8px; }
+.chapter:nth-child(even) .chapter-content { grid-column: 3; margin-right: 0; margin-left: 8px; }
 .chapter-copy .section-kicker { margin: 0 0 4px; }
 .chapter-copy h2 { font-size: 34px; font-weight: 500; margin: 10px 0 14px; color: var(--heading); line-height: 1.15; }
 .chapter-copy > p:not(.section-kicker) { color: var(--text-dim); font-size: 14.5px; line-height: 1.75; margin: 0 0 20px; }
@@ -563,7 +563,7 @@ html.dark .photo-placeholder { background: #2b2226; border-color: #3a2c30; }
   .chapter { grid-template-columns: 56px 1fr; padding-bottom: 44px; }
   .chapter-marker { grid-column: 1; grid-row: 1; padding-top: 0; }
   .chapter-marker span { min-width: 48px; height: 48px; font-size: 14px; border-width: 3px; }
-  .chapter-content, .chapter:nth-child(even of .chapter) .chapter-content { grid-column: 2; grid-row: 1; margin: 0; padding: 26px 24px; }
+  .chapter-content, .chapter:nth-child(even) .chapter-content { grid-column: 2; grid-row: 1; margin: 0; padding: 26px 24px; }
   .chapter-copy h2 { font-size: 27px; }
   .favourite-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .video-grid { grid-template-columns: 1fr; }
