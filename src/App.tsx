@@ -121,6 +121,21 @@ function HomePage({ featured, onSelect, onNavigate, onStory, onFavourite, favour
       <section className="hero">
         <div className="hero-image" style={{ backgroundImage: `url('${heroConfig.heroImage}')` }} />
         <div className="hero-vignette" />
+        <div className="hero-hearts" aria-hidden="true">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <span
+              key={i}
+              style={{
+                left: `${(i * 83 + 7) % 100}%`,
+                animationDelay: `${(i * 1.9) % 9}s`,
+                animationDuration: `${9 + (i % 5) * 2.2}s`,
+                fontSize: `${13 + (i % 4) * 7}px`,
+              }}
+            >
+              ♥
+            </span>
+          ))}
+        </div>
         <div className="hero-content">
           <div className="eyebrow"><span className="eyebrow-dot" /> Our original story <span className="eyebrow-line" /> {heroConfig.heroTimeline}</div>
           <h1>{heroConfig.heroTitle}<br /><em>{heroConfig.heroTitleAccent}</em></h1>

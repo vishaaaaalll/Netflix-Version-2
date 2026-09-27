@@ -4,7 +4,7 @@ import { Sun, Moon, Monitor, Check } from 'lucide-react';
 type ThemeMode = 'light' | 'dark' | 'system';
 
 const STORAGE_KEY = 'ournetflix-theme';
-const THEME_COLOR = { dark: '#0c0a0b', light: '#f7f4f2' };
+const THEME_COLOR = { dark: '#171114', light: '#faf5ef' };
 
 function getStoredMode(): ThemeMode {
   try {
