@@ -75,7 +75,7 @@ export type Chapter = {
 // ---------------------------------------------------------------------
 
 export const heroConfig = {
-  heroImage: '/IMG_8643.jpg',
+  heroImage: `${import.meta.env.BASE_URL}IMG_8643.jpg`,
   heroTitle: 'Anusha & Vishal',
   heroTitleAccent: 'Forever',
   heroSubtitle: 'A love story, streaming only for us.',

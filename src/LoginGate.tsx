@@ -4,7 +4,7 @@ import { Heart, LogOut, Film, ArrowRight } from 'lucide-react';
 const VALID_IDS = ['7827148228', '8800664093'];
 const PASSWORD = 'iloveyou';
 const SESSION_KEY = 'ournetflix-auth';
-const HERO_IMAGE = '/IMG_8643.jpg';
+const HERO_IMAGE = `${import.meta.env.BASE_URL}IMG_8643.jpg`;
 
 export function isAuthenticated(): boolean {
   try {
