@@ -11,6 +11,7 @@ import {
 } from '@/data/memories';
 import { ThemeToggle } from './ThemeToggle';
 import { LoginGate, LogoutButton, isAuthenticated, logout } from './LoginGate';
+import CoupleAvatars from './components/CoupleAvatars';
 
 function App() {
   const [authed, setAuthed] = useState(isAuthenticated());
@@ -56,6 +57,7 @@ function App() {
   return (
     <div className="app-shell">
       <Navbar active={activeSection} onNavigate={goTo} searchOpen={searchOpen} setSearchOpen={setSearchOpen} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} onLogoClick={handleLogoClick} />
+      {(activeSection === 'home' || activeSection === 'story') && <CoupleAvatars />}
       <main>
         {activeSection === 'home' && <HomePage featured={featuredMemory} onSelect={setSelected} onNavigate={goTo} onStory={() => setStoryOpen(true)} onFavourite={toggleFavourite} favourites={favourites} />}
         {activeSection === 'story' && <StoryPage onSelect={setSelected} onNavigate={goTo} />}
