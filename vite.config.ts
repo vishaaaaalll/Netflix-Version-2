@@ -4,9 +4,9 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://vite.dev/config/
 // The base path must match the GitHub Pages repository name.
-// The site is hosted at https://vishaaaaalll.github.io/Our-Netflix/
+// The site is hosted at https://vishaaaaalll.github.io/Netflix-Version-2/
 export default defineConfig({
-  base: '/',
+  base: '/Netflix-Version-2/',
   plugins: [react()],
   resolve: {
     alias: {
