@@ -12,6 +12,7 @@ import {
 import { ThemeToggle } from './ThemeToggle';
 import { LoginGate, LogoutButton, isAuthenticated, logout } from './LoginGate';
 import CoupleAvatars from './components/CoupleAvatars';
+import PlaygroundPage from './components/PlaygroundPage';
 
 function App() {
   const [authed, setAuthed] = useState(isAuthenticated());
@@ -64,6 +65,7 @@ function App() {
         {activeSection === 'photos' && <PhotosPage onSelect={(memory, index) => setViewer({ memory, index })} />}
         {activeSection === 'videos' && <VideosPage onSelect={setSelected} />}
         {activeSection === 'favourites' && <FavouritesPage memories={favouriteMemories} onSelect={setSelected} onFavourite={toggleFavourite} />}
+        {activeSection === 'play' && <PlaygroundPage />}
       </main>
       <footer className="site-footer">
         <div>
@@ -94,7 +96,7 @@ function App() {
 function Navbar({ active, onNavigate, searchOpen, setSearchOpen, mobileMenu, setMobileMenu, onLogoClick }: {
   active: string; onNavigate: (section: string) => void; searchOpen: boolean; setSearchOpen: (open: boolean) => void; mobileMenu: boolean; setMobileMenu: (open: boolean) => void; onLogoClick: () => void;
 }) {
-  const links = [['home', 'Home'], ['story', 'Our Story'], ['photos', 'Photos'], ['videos', 'Videos'], ['favourites', 'Favourites']];
+  const links = [['home', 'Home'], ['story', 'Our Story'], ['photos', 'Photos'], ['videos', 'Videos'], ['favourites', 'Favourites'], ['play', 'Playground']];
   return (
     <header className={`nav-shell ${active !== 'home' ? 'nav-solid' : ''}`}>
       <div className="nav-inner">

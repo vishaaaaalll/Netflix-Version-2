@@ -1,138 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-const SKIN = '#ffd9b8';
-const SKIN_D = '#f0bd93';
-
-/* ------------------------------------------------------------------ */
-/*  Rigged SVG characters. Each limb lives in an outer <g> translated  */
-/*  to its joint; the inner <g data-rig="..."> gets rotate() each      */
-/*  frame around that joint.                                           */
-/* ------------------------------------------------------------------ */
-
-function VishalSvg() {
-  return (
-    <svg viewBox="0 0 120 170" width="100%" height="100%" aria-hidden="true">
-      {/* legs */}
-      <g transform="translate(47,126)"><g data-rig="legL">
-        <rect x="-7.5" y="0" width="15" height="32" rx="7" fill="#6d7178" />
-        <ellipse cx="0" cy="36" rx="9" ry="5.5" fill="#2b2b31" />
-      </g></g>
-      <g transform="translate(73,126)"><g data-rig="legR">
-        <rect x="-7.5" y="0" width="15" height="32" rx="7" fill="#6d7178" />
-        <ellipse cx="0" cy="36" rx="9" ry="5.5" fill="#2b2b31" />
-      </g></g>
-      {/* torso: blazer */}
-      <rect x="30" y="86" width="60" height="48" rx="15" fill="#23232b" />
-      <polygon points="52,88 68,88 60,112" fill="#f5f2ec" />
-      <polygon points="52,88 43,97 52,109" fill="#2f2f3a" />
-      <polygon points="68,88 77,97 68,109" fill="#2f2f3a" />
-      <circle cx="60" cy="118" r="1.7" fill="#0f0f13" />
-      <circle cx="60" cy="126" r="1.7" fill="#0f0f13" />
-      <rect x="70" y="102" width="3.6" height="12" rx="1.8" fill="#d9a441" />
-      <rect x="34" y="118" width="12" height="3" rx="1.5" fill="#17171d" />
-      <rect x="74" y="118" width="12" height="3" rx="1.5" fill="#17171d" />
-      {/* arms */}
-      <g transform="translate(33,94)"><g data-rig="armL">
-        <rect x="-6.5" y="0" width="13" height="36" rx="6.5" fill="#23232b" />
-        <circle cx="0" cy="40" r="6.5" fill={SKIN} />
-      </g></g>
-      <g transform="translate(87,94)"><g data-rig="armR">
-        <rect x="-6.5" y="0" width="13" height="36" rx="6.5" fill="#23232b" />
-        <circle cx="0" cy="40" r="6.5" fill={SKIN} />
-      </g></g>
-      {/* neck + head */}
-      <rect x="54" y="76" width="12" height="14" rx="5" fill={SKIN_D} />
-      <g data-rig="head">
-        <circle cx="27" cy="52" r="6" fill={SKIN} />
-        <circle cx="93" cy="52" r="6" fill={SKIN} />
-        <circle cx="60" cy="50" r="33" fill={SKIN} />
-        <path d="M28,54 C26,24 44,14 60,14 C76,14 94,24 92,54 C88,44 86,38 82,36 C84,42 80,40 76,34 C70,28 64,30 60,28 C48,26 38,34 36,44 C32,44 30,48 28,54 Z" fill="#1e1c1c" />
-        <path d="M32,58 Q60,94 88,58" stroke="#c99b72" strokeWidth="3" fill="none" opacity="0.8" strokeLinecap="round" />
-        <path d="M48,84 Q60,90 72,84" stroke="#c99b72" strokeWidth="2.4" fill="none" opacity="0.7" strokeLinecap="round" />
-        <g data-rig="eyes">
-          <circle cx="47" cy="51" r="4.2" fill="#2b1d16" />
-          <circle cx="73" cy="51" r="4.2" fill="#2b1d16" />
-          <circle cx="48.5" cy="49.5" r="1.4" fill="#fff" />
-          <circle cx="74.5" cy="49.5" r="1.4" fill="#fff" />
-        </g>
-        <circle cx="47" cy="50" r="10.5" stroke="#3a3a3a" strokeWidth="2.5" fill="rgba(255,255,255,0.07)" />
-        <circle cx="73" cy="50" r="10.5" stroke="#3a3a3a" strokeWidth="2.5" fill="rgba(255,255,255,0.07)" />
-        <path d="M57,50 Q60,46 63,50" stroke="#3a3a3a" strokeWidth="2.5" fill="none" />
-        <path d="M37,50 L28,48 M83,50 L92,48" stroke="#3a3a3a" strokeWidth="2.5" />
-        <path d="M40,36 Q47,33 54,36" stroke="#1e1c1c" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-        <path d="M66,36 Q73,33 80,36" stroke="#1e1c1c" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-        <path d="M50,68 Q60,75 70,68" stroke="#8a4b3c" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-      </g>
-    </svg>
-  );
-}
-
-function AnushaSvg() {
-  return (
-    <svg viewBox="0 0 120 170" width="100%" height="100%" aria-hidden="true">
-      {/* back hair */}
-      <path d="M60,6 C34,6 24,28 26,56 C27,80 21,110 28,144 C42,152 78,152 92,144 C99,110 93,80 94,56 C96,28 86,6 60,6 Z" fill="#231e1d" />
-      <path d="M38,60 C36,90 34,116 38,138 M82,60 C84,90 86,116 82,138" stroke="#38302e" strokeWidth="3" fill="none" opacity="0.7" strokeLinecap="round" />
-      {/* legs */}
-      <g transform="translate(47,126)"><g data-rig="legL">
-        <rect x="-9.5" y="0" width="19" height="32" rx="8" fill="#d9c6a5" />
-        <ellipse cx="0" cy="36" rx="9" ry="5.5" fill="#2b2b31" />
-      </g></g>
-      <g transform="translate(73,126)"><g data-rig="legR">
-        <rect x="-9.5" y="0" width="19" height="32" rx="8" fill="#d9c6a5" />
-        <ellipse cx="0" cy="36" rx="9" ry="5.5" fill="#2b2b31" />
-      </g></g>
-      {/* torso: ribbed top */}
-      <rect x="31" y="86" width="58" height="48" rx="15" fill="#1e1e24" />
-      {[42, 52, 62, 72, 82].map(x => (
-        <line key={x} x1={x} y1="94" x2={x} y2="128" stroke="#2e2e38" strokeWidth="1.6" />
-      ))}
-      <circle cx="50" cy="90" r="3.6" fill="#f5f2ec" />
-      <circle cx="60" cy="90" r="3.6" fill="#f5f2ec" />
-      <circle cx="70" cy="90" r="3.6" fill="#f5f2ec" />
-      {/* bag */}
-      <path d="M86,90 C92,98 94,106 94,114" stroke="#cbb894" strokeWidth="3" fill="none" />
-      <rect x="83" y="112" width="22" height="27" rx="8" fill="#e8dcc3" />
-      <line x1="83" y1="121" x2="105" y2="121" stroke="#d3c5a6" strokeWidth="2" />
-      {/* arms */}
-      <g transform="translate(33,94)"><g data-rig="armL">
-        <rect x="-6.5" y="0" width="13" height="36" rx="6.5" fill="#1e1e24" />
-        <circle cx="0" cy="40" r="6.5" fill={SKIN} />
-      </g></g>
-      <g transform="translate(87,94)"><g data-rig="armR">
-        <rect x="-6.5" y="0" width="13" height="36" rx="6.5" fill="#1e1e24" />
-        <circle cx="0" cy="40" r="6.5" fill={SKIN} />
-      </g></g>
-      {/* neck + head */}
-      <rect x="54" y="76" width="12" height="14" rx="5" fill={SKIN_D} />
-      <g data-rig="head">
-        <circle cx="28" cy="54" r="5.5" fill={SKIN} />
-        <circle cx="92" cy="54" r="5.5" fill={SKIN} />
-        <circle cx="60" cy="50" r="32" fill={SKIN} />
-        <circle cx="28" cy="62" r="3.4" stroke="#d9a441" strokeWidth="2" fill="none" />
-        <circle cx="92" cy="62" r="3.4" stroke="#d9a441" strokeWidth="2" fill="none" />
-        <path d="M30,30 C24,50 26,74 34,92 C30,70 32,50 38,36 Z" fill="#231e1d" />
-        <path d="M90,30 C96,50 94,74 86,92 C90,70 88,50 82,36 Z" fill="#231e1d" />
-        <path d="M30,44 C36,26 48,20 60,20 C72,20 84,26 90,44 C80,34 70,32 60,32 C50,32 40,34 30,44 Z" fill="#231e1d" />
-        <ellipse cx="40" cy="60" rx="5" ry="3" fill="#ff9d9d" opacity="0.55" />
-        <ellipse cx="80" cy="60" rx="5" ry="3" fill="#ff9d9d" opacity="0.55" />
-        <g data-rig="eyes">
-          <circle cx="48" cy="52" r="5" fill="#2b1d16" />
-          <circle cx="72" cy="52" r="5" fill="#2b1d16" />
-          <circle cx="49.8" cy="50" r="1.7" fill="#fff" />
-          <circle cx="73.8" cy="50" r="1.7" fill="#fff" />
-        </g>
-        <path d="M41,38 Q48,35 55,38" stroke="#231e1d" strokeWidth="2" fill="none" strokeLinecap="round" />
-        <path d="M65,38 Q72,35 79,38" stroke="#231e1d" strokeWidth="2" fill="none" strokeLinecap="round" />
-        <path d="M50,65 Q60,78 70,65 Q60,70 50,65 Z" fill="#a34f4a" />
-      </g>
-    </svg>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Physics + animation                                                */
-/* ------------------------------------------------------------------ */
+const VISHAL_SRC = `${import.meta.env.BASE_URL}images/avatars/vishal.png`;
+const ANUSHA_SRC = `${import.meta.env.BASE_URL}images/avatars/anusha.png`;
+/* measured aspect ratios (w / h) of the cut-out PNGs */
+const V_AR = 238 / 640;
+const A_AR = 254 / 640;
 
 const HEART_CHARS = ['💗', '💖', '💕', '💘'];
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
@@ -140,16 +12,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
 interface Body {
   x: number; y: number; vx: number; vy: number;
-  r: number; size: number; phase: number;
-  walkPhase: number; armL: number; armR: number;
-  blinkT: number; closeT: number; squashT: number;
-  hopT: number; danceT: number; boingT: number; hopsLeft: number;
-}
-
-interface Rig {
-  legL: SVGGElement; legR: SVGGElement;
-  armL: SVGGElement; armR: SVGGElement;
-  head: SVGGElement; eyes: SVGGElement;
+  w: number; h: number; phase: number;
+  face: number; // smoothed -1 | 1, faces travel direction
+  squashT: number; hopT: number; hopsLeft: number;
+  danceT: number; boingT: number;
 }
 
 interface Heart {
@@ -160,10 +26,12 @@ interface Heart {
 
 type Mode = 'play' | 'hug' | 'read';
 
-const rigFor = (root: HTMLElement): Rig => {
-  const q = (n: string) => root.querySelector<SVGGElement>(`[data-rig="${n}"]`)!;
-  return { legL: q('legL'), legR: q('legR'), armL: q('armL'), armR: q('armR'), head: q('head'), eyes: q('eyes') };
-};
+/* ------------------------------------------------------------------ */
+/*  Floating illustrated couple. Viewport-fixed: the layer is          */
+/*  position:fixed, physics run in viewport coordinates, and bounce    */
+/*  bounds use each character's full rendered size so they never get   */
+/*  clipped by screen edges and never scroll away with the page.       */
+/* ------------------------------------------------------------------ */
 
 export default function CoupleAvatars() {
   const layerRef = useRef<HTMLDivElement>(null);
@@ -175,28 +43,23 @@ export default function CoupleAvatars() {
 
     let W = window.innerWidth;
     let H = window.innerHeight;
-    const size = W < 640 ? 84 : 116;
-    const sizeH = size * (170 / 120);
+    const hV = W < 640 ? 92 : 124;
+    const hA = W < 640 ? 84 : 112;
 
-    const mkBody = (x: number, y: number): Body => ({
+    const mkBody = (x: number, y: number, h: number, ar: number): Body => ({
       x, y, vx: rand(-90, 90), vy: rand(-60, 60),
-      r: size * 0.34, size, phase: rand(0, Math.PI * 2),
-      walkPhase: rand(0, 6), armL: 0, armR: 0,
-      blinkT: rand(1, 4), closeT: 0, squashT: 0,
-      hopT: 0, danceT: rand(8, 15), boingT: rand(4, 9), hopsLeft: 0,
+      w: h * ar, h, phase: rand(0, Math.PI * 2),
+      face: 1, squashT: 0, hopT: 0, hopsLeft: 0,
+      danceT: rand(8, 15), boingT: rand(4, 9),
     });
-    const A = mkBody(W * 0.28, H * 0.55);
-    const B = mkBody(W * 0.72, H * 0.5);
+    const A = mkBody(W * 0.28, H * 0.55, hV, V_AR);
+    const B = mkBody(W * 0.72, H * 0.5, hA, A_AR);
     A.vx = 70; B.vx = -70;
 
     const rootA = layer.querySelector<HTMLElement>('.couple-avatar-a')!;
     const rootB = layer.querySelector<HTMLElement>('.couple-avatar-b')!;
-    const rigA = rigFor(rootA);
-    const rigB = rigFor(rootB);
-    for (const r of [rootA, rootB]) {
-      (r as HTMLElement).style.width = `${size}px`;
-      (r as HTMLElement).style.height = `${sizeH}px`;
-    }
+    rootA.style.width = `${A.w}px`; rootA.style.height = `${A.h}px`;
+    rootB.style.width = `${B.w}px`; rootB.style.height = `${B.h}px`;
 
     const heartsBox = layer.querySelector<HTMLDivElement>('.couple-hearts')!;
     const bubble = layer.querySelector<HTMLDivElement>('.couple-bubble')!;
@@ -229,12 +92,13 @@ export default function CoupleAvatars() {
       for (let i = 0; i < n; i++) spawnHeart(x + rand(-24, 24), y + rand(-24, 24), big);
     };
 
+    const keepInside = (b: Body) => {
+      b.x = clamp(b.x, b.w / 2, W - b.w / 2);
+      b.y = clamp(b.y, b.h / 2, H - b.h / 2);
+    };
     const onResize = () => {
       W = window.innerWidth; H = window.innerHeight;
-      for (const b of [A, B]) {
-        b.x = clamp(b.x, b.r, W - b.r);
-        b.y = clamp(b.y, b.r, H - b.r);
-      }
+      keepInside(A); keepInside(B);
     };
 
     const onScroll = () => {
@@ -242,28 +106,33 @@ export default function CoupleAvatars() {
       const dy = y - lastY;
       lastY = y;
       if (!dy) return;
-      const kick = clamp(-dy * 0.35, -430, 430);
+      /* gentle nudge so they react to scrolling, but they stay viewport-fixed */
+      const kick = clamp(-dy * 0.25, -260, 260);
       for (const b of [A, B]) {
         b.vy += kick * rand(0.8, 1.2);
-        b.vx += rand(-50, 50);
+        b.vx += rand(-30, 30);
         const sp = Math.hypot(b.vx, b.vy);
-        if (sp > 560) { b.vx *= 560 / sp; b.vy *= 560 / sp; }
+        if (sp > 520) { b.vx *= 520 / sp; b.vy *= 520 / sp; }
       }
     };
 
     const wallBounce = (b: Body) => {
-      const rest = 0.9;
-      const hit = (v: number) => { if (Math.abs(v) > 220) { b.squashT = 0.22; return true; } return false; };
-      if (b.x < b.r) { b.x = b.r; if (b.vx < 0) { if (hit(b.vx)) burst(b.r + 10, b.y, 2); b.vx = -b.vx * rest; } }
-      else if (b.x > W - b.r) { b.x = W - b.r; if (b.vx > 0) { if (hit(b.vx)) burst(W - b.r - 10, b.y, 2); b.vx = -b.vx * rest; } }
-      if (b.y < b.r) { b.y = b.r; if (b.vy < 0) { if (hit(b.vy)) burst(b.x, b.r + 10, 3); b.vy = -b.vy * rest; } }
-      else if (b.y > H - b.r) { b.y = H - b.r; if (b.vy > 0) { if (hit(b.vy)) burst(b.x, H - b.r - 10, 3); b.vy = -b.vy * rest; } }
+      const rest = 0.92;
+      const hw = b.w / 2, hh = b.h / 2;
+      const hard = (v: number) => {
+        if (Math.abs(v) > 220) { b.squashT = 0.22; return true; }
+        return false;
+      };
+      if (b.x < hw) { b.x = hw; if (b.vx < 0) { if (hard(b.vx)) burst(hw + 6, b.y, 2); b.vx = -b.vx * rest; } }
+      else if (b.x > W - hw) { b.x = W - hw; if (b.vx > 0) { if (hard(b.vx)) burst(W - hw - 6, b.y, 2); b.vx = -b.vx * rest; } }
+      if (b.y < hh) { b.y = hh; if (b.vy < 0) { if (hard(b.vy)) burst(b.x, hh + 6, 3); b.vy = -b.vy * rest; } }
+      else if (b.y > H - hh) { b.y = H - hh; if (b.vy > 0) { if (hard(b.vy)) burst(b.x, H - hh - 6, 3); b.vy = -b.vy * rest; } }
     };
 
     const collideBodies = () => {
       const dx = B.x - A.x, dy = B.y - A.y;
       const dist = Math.hypot(dx, dy) || 0.001;
-      const minD = A.r + B.r;
+      const minD = (A.w + B.w) * 0.36;
       if (dist >= minD) return;
       const nx = dx / dist, ny = dy / dist;
       const overlap = (minD - dist) / 2;
@@ -306,7 +175,7 @@ export default function CoupleAvatars() {
       if (mode === 'hug') {
         const dx = B.x - A.x, dy = B.y - A.y;
         const d = Math.hypot(dx, dy) || 1;
-        const rest = (A.r + B.r) * 0.82;
+        const rest = (A.w + B.w) * 0.3;
         const pull = (d - rest) * 60;
         const nx = dx / d, ny = dy / d;
         A.vx += nx * pull * dt; A.vy += ny * pull * dt;
@@ -350,6 +219,9 @@ export default function CoupleAvatars() {
         b.vy += (H * 0.5 - b.y) * 0.12 * dt;
         b.x += b.vx * dt; b.y += b.vy * dt;
         wallBounce(b);
+        /* face travel direction, with a dead-zone so they don't flicker */
+        const target = b.vx >= 12 ? 1 : b.vx <= -12 ? -1 : (b.face >= 0 ? 1 : -1);
+        b.face += (target - b.face) * Math.min(1, dt * 6);
       }
       collideBodies();
 
@@ -367,73 +239,26 @@ export default function CoupleAvatars() {
       }
     };
 
-    /* Animate one rig: walk-cycle legs, swinging / posing arms, head bob + blink */
-    const animateRig = (b: Body, rig: Rig, partner: Body, dt: number) => {
-      const speed = Math.hypot(b.vx, b.vy);
-      b.walkPhase += dt * (3 + speed * 0.045);
-      const swing = Math.sin(b.walkPhase) * clamp(5 + speed * 0.055, 5, 30);
-
-      let legL = swing, legR = -swing;
-      let armLT: number, armRT: number;
-      const idleL = Math.sin(t * 2.1 + b.phase) * 4;
-      const idleR = Math.sin(t * 2.1 + b.phase + 1) * 4;
-
-      if (mode === 'hug' || mode === 'read') {
-        legL = Math.sin(t * 2 + b.phase) * 3;
-        legR = -legL;
-      }
-      if (mode === 'hug') {
-        const reach = clamp((partner.x - b.x) * 0.2, -62, 62);
-        armLT = reach; armRT = reach * 0.8;
-      } else if (mode === 'read') {
-        armLT = 34 + idleL * 0.3; armRT = -34 + idleR * 0.3;
-      } else if (b.hopsLeft > 0) {
-        armLT = -140; armRT = 140;   // arms up while hopping!
-        legL = -18; legR = 18;
-      } else {
-        armLT = -swing * 0.7 + idleL;
-        armRT = swing * 0.7 + idleR;
-      }
-
-      const k = Math.min(1, dt * 10);
-      b.armL += (armLT - b.armL) * k;
-      b.armR += (armRT - b.armR) * k;
-      rig.legL.setAttribute('transform', `rotate(${legL.toFixed(2)})`);
-      rig.legR.setAttribute('transform', `rotate(${legR.toFixed(2)})`);
-      rig.armL.setAttribute('transform', `rotate(${b.armL.toFixed(2)})`);
-      rig.armR.setAttribute('transform', `rotate(${b.armR.toFixed(2)})`);
-
-      // head bob + tilt + blink
-      const bob = Math.sin(b.walkPhase * 2) * 1.8;
-      let tiltT = clamp(b.vx * 0.02, -9, 9);
-      if (mode === 'hug' || mode === 'read') tiltT += clamp((partner.x - b.x) * 0.03, -8, 8);
-      rig.head.setAttribute('transform', `translate(0 ${bob.toFixed(2)}) rotate(${tiltT.toFixed(2)} 60 52)`);
-      b.blinkT -= dt;
-      if (b.blinkT <= 0) { b.blinkT = rand(2.2, 5); b.closeT = 0.13; }
-      b.closeT -= dt;
-      const eyeS = b.closeT > 0 ? 0.12 : 1;
-      rig.eyes.setAttribute('transform', `translate(60 52) scale(1 ${eyeS}) translate(-60 -52)`);
-    };
-
-    const render = () => {
-      const pairs: Array<[Body, Rig, HTMLElement, Body]> = [
-        [A, rigA, rootA, B],
-        [B, rigB, rootB, A],
-      ];
-      for (const [b, , root] of pairs) {
+    const render = (dt: number) => {
+      void dt;
+      for (const [b, root] of [[A, rootA], [B, rootB]] as Array<[Body, HTMLElement]>) {
         b.squashT = Math.max(0, b.squashT - 1 / 60);
         const k = b.squashT > 0 ? Math.sin((b.squashT / 0.22) * Math.PI) : 0;
-        const sx = 1 + 0.16 * k, sy = 1 - 0.2 * k;
-        const bobAll = Math.abs(Math.sin(b.walkPhase)) * 2.5;
+        const bob = Math.sin(t * 2.2 + b.phase) * 5;
+        const tilt = clamp(b.vx * 0.018, -8, 8);
+        const flip = b.face < 0 ? -1 : 1;
+        const sx = (1 + 0.14 * k) * flip;
+        const sy = 1 - 0.18 * k;
         root.style.transform =
-          `translate3d(${(b.x - b.size / 2).toFixed(1)}px, ${(b.y - sizeH / 2 + bobAll).toFixed(1)}px, 0) scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
+          `translate3d(${(b.x - b.w / 2).toFixed(1)}px, ${(b.y - b.h / 2 + bob).toFixed(1)}px, 0)` +
+          ` rotate(${tilt.toFixed(2)}deg) scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
       }
       if (mode === 'read' || mode === 'hug') {
         const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2;
         bubble.textContent = mode === 'read' ? '📖' : '🤗';
         bubble.style.opacity = '1';
         bubble.style.transform =
-          `translate3d(${(mx - 22).toFixed(1)}px, ${(my - sizeH / 2 - 58 + Math.sin(t * 2.5) * 4).toFixed(1)}px, 0)`;
+          `translate3d(${(mx - 22).toFixed(1)}px, ${(my - Math.max(A.h, B.h) / 2 - 58 + Math.sin(t * 2.5) * 4).toFixed(1)}px, 0)`;
       } else {
         bubble.style.opacity = '0';
       }
@@ -444,9 +269,7 @@ export default function CoupleAvatars() {
       const dt = Math.min((now - last) / 1000, 0.033);
       last = now;
       step(dt);
-      animateRig(A, rigA, B, dt);
-      animateRig(B, rigB, A, dt);
-      render();
+      render(dt);
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
@@ -463,8 +286,12 @@ export default function CoupleAvatars() {
 
   return (
     <div ref={layerRef} className="couple-layer" aria-hidden="true">
-      <div className="couple-avatar couple-avatar-a"><VishalSvg /></div>
-      <div className="couple-avatar couple-avatar-b"><AnushaSvg /></div>
+      <div className="couple-avatar couple-avatar-a">
+        <img src={VISHAL_SRC} alt="" draggable={false} />
+      </div>
+      <div className="couple-avatar couple-avatar-b">
+        <img src={ANUSHA_SRC} alt="" draggable={false} />
+      </div>
       <div className="couple-hearts" />
       <div className="couple-bubble">📖</div>
     </div>
