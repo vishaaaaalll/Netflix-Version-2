@@ -576,3 +576,284 @@ export const chapters: Chapter[] = [
     ids: [],
   },
 ];
+
+/* =====================================================================
+   OUR WEB SERIES — "Every Time We Met"
+   Each visit from the chat is an episode; visits are grouped into
+   seasons with Netflix-style series names. Places marked placeGuess
+   are Vishal's best guess from chat context — confirm before publishing.
+   No chat quotes here: Vishal adds his own photos/videos per episode.
+   ===================================================================== */
+
+export interface Episode {
+  n: number;
+  title: string;
+  place: string;
+  placeGuess?: boolean;
+  date: string;
+  brief: string;
+}
+
+export interface Series {
+  id: string;
+  name: string;
+  season: string;
+  years: string;
+  tagline: string;
+  accent: 'rose' | 'violet' | 'teal' | 'gold';
+  episodes: Episode[];
+}
+
+export const series: Series[] = [
+  {
+    id: 'articleship-adventures',
+    name: 'The Articleship Adventures',
+    season: 'Season 1',
+    years: '2022 – 2024',
+    tagline: 'Two CA students, one Delhi metro, and every excuse to meet.',
+    accent: 'rose',
+    episodes: [
+      {
+        n: 1,
+        title: 'The Farewell Party',
+        place: 'AVJ Coaching, Laxmi Nagar',
+        date: '5 Sep 2022',
+        brief:
+          'The day we finally met in person. Shy hellos at the farewell, then the small moments that changed everything — his hand resting on her leg, her head on his shoulder for ten minutes of the best sleep ever, and both of us wishing the metro would never come. That night, our first "I love you".',
+      },
+      {
+        n: 2,
+        title: 'Her Birthday',
+        place: 'East Delhi',
+        placeGuess: true,
+        date: 'Feb 2023',
+        brief:
+          'He showed up for her birthday — and she still says "maza aaya tha". No big plans, no show-off. Just him being there, which turned out to be the whole gift.',
+      },
+      {
+        n: 3,
+        title: 'The Empty Mall',
+        place: 'Adventure Island, Rohini',
+        date: 'Feb 2023',
+        brief:
+          'An almost-empty mall, just us and one couple doing a photoshoot — we watched a stranger put a mangalsutra on his girl and propose in his own style. We walked out holding each other a little tighter. These were our first-kiss days.',
+      },
+      {
+        n: 4,
+        title: 'The Secret Getaway',
+        place: 'Somewhere in Delhi',
+        placeGuess: true,
+        date: 'Jun 2023',
+        brief:
+          'Our first little getaway together — a whole day that was just ours. No coaching, no offices, no world. Just us, and the beginning of a beautiful habit.',
+      },
+      {
+        n: 5,
+        title: 'Bheed Bheed Mast',
+        place: 'Laxmi Nagar',
+        date: '5 May 2024',
+        brief:
+          'Planned over metro messages like a tiny heist — Rajiv Chowk to Laxmi Nagar on a Sunday. Crowded, chaotic, and in her words: "bheed bheed bheed… masttt". We came home so happy.',
+      },
+      {
+        n: 6,
+        title: 'Saket by Metro',
+        place: 'Saket',
+        date: '7 Jul 2024',
+        brief:
+          'Hauz Khas to Saket, one live location pin that said "aagya saket". A quick, simple date three days after a hard week — small, defiant, normal. Just metro rides and each other.',
+      },
+      {
+        n: 7,
+        title: 'New Delhi Junction',
+        place: 'New Delhi Metro Station',
+        date: '11 Oct 2024',
+        brief:
+          'Two people navigating metro stations toward each other on a quiet October day. No drama, no occasion — just us, meeting because we wanted to.',
+      },
+    ],
+  },
+  {
+    id: 'mountain-escape',
+    name: 'The Mountain Escape',
+    season: 'Season 2',
+    years: 'Dec 2025',
+    tagline: 'Our first real trip — the hills, a tent, and five perfect days.',
+    accent: 'teal',
+    episodes: [
+      {
+        n: 1,
+        title: 'Kashmere Gate, 10:30 PM',
+        place: 'Kashmere Gate ISBT, Delhi',
+        date: '12 Dec 2025',
+        brief:
+          'A full covert operation: her parents dropping her at the bus stand, live locations shared, stand 59/60 — and a night bus to the mountains at 10:30 PM with Abhishek and Monika. My heart was racing the whole time.',
+      },
+      {
+        n: 2,
+        title: 'Jibhi Days',
+        place: 'Jibhi, Himachal Pradesh',
+        date: '13 – 17 Dec 2025',
+        brief:
+          'Five days in the hills — our first real trip together. A tent, endless uno games, gloves from a hillside shop, and mountains all around us. We came back happier than we had ever been.',
+      },
+    ],
+  },
+  {
+    id: 'birthday-getaway',
+    name: 'The Birthday Getaway',
+    season: 'Season 3',
+    years: 'Jan 2026',
+    tagline: 'Her birthday, our way — lunch, a cover story, and two days of us.',
+    accent: 'violet',
+    episodes: [
+      {
+        n: 1,
+        title: 'NSP at 2:30',
+        place: 'Netaji Subhash Place',
+        date: '24 Jan 2026',
+        brief:
+          'Birthday lunch at NSP with Nandini and Priyanshu, a cover story for the families, metro rides both ways — and when her new sandals started hurting, he offered his shoes. She wore his shoes; he wore her smile.',
+      },
+      {
+        n: 2,
+        title: 'Two Days, Just Us',
+        place: 'Delhi',
+        placeGuess: true,
+        date: '24 – 25 Jan 2026',
+        brief:
+          'Two whole days with zero messages to the outside world — because we were too busy being together. Her birthday gift to me was her time; mine to her was all of mine.',
+      },
+    ],
+  },
+  {
+    id: 'to-be-continued',
+    name: 'To Be Continued…',
+    season: 'Season 4',
+    years: '2026 –',
+    tagline: 'Still writing. Still meeting. Still us.',
+    accent: 'gold',
+    episodes: [
+      {
+        n: 1,
+        title: 'She Came to My Side',
+        place: 'Uttam Nagar',
+        placeGuess: true,
+        date: 'Apr 2026',
+        brief:
+          'She came all the way to my side of the city — "bada mast laga, dobara aane ka man kar raha hai". My neighbourhood, my streets — and suddenly my favourite place in Delhi, because she was in it.',
+      },
+    ],
+  },
+];
+
+/* =====================================================================
+   SPECIAL MOMENTS — all our first times
+   ===================================================================== */
+
+export interface FirstMoment {
+  title: string;
+  date: string;
+  place: string;
+  placeGuess?: boolean;
+  brief: string;
+}
+
+export const firstMoments: FirstMoment[] = [
+  {
+    title: 'First "I Love You"',
+    date: '5 Sep 2022',
+    place: 'After the AVJ farewell, Laxmi Nagar',
+    brief: 'The metro ride home, the regret of ten unsaid minutes — and then, that night, the three words that started everything.',
+  },
+  {
+    title: 'First Kiss',
+    date: 'Feb 2023',
+    place: 'Adventure Island days, Rohini',
+    brief: 'Neither of us knew how — "dono ko kiss bhi nahi aati thi sahi se" — so we learned together. Perfectly us.',
+  },
+  {
+    title: 'First Birthday Together',
+    date: 'Feb 2023',
+    place: 'Delhi',
+    placeGuess: true,
+    brief: 'He showed up. That was the whole magic — he showed up, and she still smiles about it.',
+  },
+  {
+    title: 'First Getaway',
+    date: 'Jun 2023',
+    place: 'Delhi',
+    placeGuess: true,
+    brief: 'Our first day that belonged to nobody but us. The first of many "just us" days.',
+  },
+  {
+    title: 'First Real Trip',
+    date: 'Dec 2025',
+    place: 'Jibhi, Himachal Pradesh',
+    brief: 'Out of Delhi, into the mountains — five days that proved we travel as beautifully as we love.',
+  },
+  {
+    title: 'Her First Visit to My Side',
+    date: 'Apr 2026',
+    place: 'Uttam Nagar',
+    placeGuess: true,
+    brief: 'She crossed the whole city to my neighbourhood — and my ordinary streets became our newest memory.',
+  },
+];
+
+/* =====================================================================
+   JUST US — briefs of the places where we spent our time together.
+   What each place is + what we did there, from our chats.
+   ===================================================================== */
+
+export interface PlaceBrief {
+  place: string;
+  placeGuess?: boolean;
+  tagline: string;
+  brief: string;
+}
+
+export const placeBriefs: PlaceBrief[] = [
+  {
+    place: 'Laxmi Nagar',
+    tagline: 'Where it all started',
+    brief:
+      'Our CA coaching adda — the place that gave us each other. We planned the May 2024 date over metro messages like a tiny heist, roamed the crowded lanes, and came home buzzing. Bheed bheed bheed… masttt.',
+  },
+  {
+    place: 'Saket',
+    tagline: 'A small, defiant, normal date',
+    brief:
+      'Hauz Khas to Saket by metro on a July evening — no occasion, no plan, just us. We talked, we laughed, we rode home happy. Sometimes the simplest dates are the sweetest.',
+  },
+  {
+    place: 'Adventure Island, Rohini',
+    tagline: 'The empty mall',
+    brief:
+      'An almost-empty mall where we once watched a stranger propose with a mangalsutra — and walked out holding each other tighter. These lanes saw our first-kiss days.',
+  },
+  {
+    place: 'New Delhi Metro Station',
+    tagline: 'Half our love story',
+    brief:
+      'So much of us happened between metro stations — navigating toward each other, sharing live locations, wishing the ten-minute ride would never end.',
+  },
+  {
+    place: 'Jibhi, Himachal Pradesh',
+    tagline: 'Our mountain escape',
+    brief:
+      'Five December days in the hills — a tent, uno games, gloves from a hillside shop, and the mountains watching over us. Our first real trip, and pure happiness after.',
+  },
+  {
+    place: 'Netaji Subhash Place',
+    tagline: 'Her birthday, our way',
+    brief:
+      'Birthday lunch with friends, a cover story for the families, metro rides both ways — and a shoe swap when her sandals hurt. NSP will always be her birthday to me now.',
+  },
+  {
+    place: 'Uttam Nagar',
+    tagline: 'My side of the city',
+    brief:
+      'My neighbourhood — and the day she came all the way here just to be with me. "Bada mast laga, dobara aane ka man kar raha hai." My streets never looked this beautiful.',
+  },
+];

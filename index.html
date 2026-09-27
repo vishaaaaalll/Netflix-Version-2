@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="theme-color" content="#171114" />
+    <meta name="theme-color" content="#faf5ef" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Anusha & Vishal — Forever | Our Netflix</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,18 +18,21 @@
     <script>
       // Apply the saved theme before first paint to avoid a flash of the wrong theme.
       (function () {
+        var colors = { rose: '#faf5ef', lavender: '#f7f3fc', sage: '#f5f7f0', ocean: '#0e1622', cocoa: '#171114' };
         try {
-          var stored = localStorage.getItem('ournetflix-theme') || 'system';
-          var dark =
-            stored === 'dark' ||
-            (stored === 'system' &&
-              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          var stored = localStorage.getItem('ournetflix-theme') || 'rose';
+          // Migrate old values: light -> rose, dark/system-dark -> cocoa.
+          if (stored === 'light') stored = 'rose';
+          else if (stored === 'dark') stored = 'cocoa';
+          else if (stored === 'system')
+            stored = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'cocoa' : 'rose';
+          if (!colors[stored]) stored = 'rose';
           var root = document.documentElement;
-          root.classList.add(dark ? 'dark' : 'light');
+          root.classList.add('theme-' + stored);
           var meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute('content', dark ? '#171114' : '#faf5ef');
+          if (meta) meta.setAttribute('content', colors[stored]);
         } catch (e) {
-          document.documentElement.classList.add('dark');
+          document.documentElement.classList.add('theme-rose');
         }
       })();
     </script>

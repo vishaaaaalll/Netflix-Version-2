@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState, type ChangeEvent } from 'react';
 import {
   ArrowRight, ChevronDown, ChevronLeft, ChevronRight, CircleUserRound,
-  Clock3, Film, Heart, HeartHandshake, Menu, Play, Search, Share2, Sparkles,
+  Clock3, Film, Heart, HeartHandshake, MapPin, Menu, Play, Search, Share2, Sparkles,
   X, Upload
 } from 'lucide-react';
 import {
-  type Memory, type Row,
-  memories, rows, chapters, heroConfig, surpriseConfig
+  type Memory, type Row, type Series,
+  memories, rows, chapters, heroConfig, surpriseConfig,
+  series, firstMoments, placeBriefs
 } from '@/data/memories';
 import { ThemeToggle } from './ThemeToggle';
 import { LoginGate, LogoutButton, isAuthenticated, logout } from './LoginGate';
@@ -116,6 +117,8 @@ function Navbar({ active, onNavigate, searchOpen, setSearchOpen, mobileMenu, set
 function HomePage({ featured, onSelect, onNavigate, onStory, onFavourite, favourites }: {
   featured: Memory; onSelect: (memory: Memory) => void; onNavigate: (section: string) => void; onStory: () => void; onFavourite: (id: string) => void; favourites: string[];
 }) {
+  const [openSeries, setOpenSeries] = useState<Series | null>(null);
+  const homeRows = rows.filter((row) => row.title === 'Continue Watching' || row.title === 'Our Favourite Memories');
   return (
     <>
       <section className="hero">
@@ -156,7 +159,100 @@ function HomePage({ featured, onSelect, onNavigate, onStory, onFavourite, favour
           <div><p className="section-kicker">A little universe of us</p><h2>Every moment has a story.</h2></div>
           <button className="text-link" onClick={() => onNavigate('story')}>Explore our story <ArrowRight size={15} /></button>
         </div>
-        {rows.map((row) => <ContentRow key={row.title} row={row} onSelect={onSelect} onFavourite={onFavourite} favourites={favourites} />)}
+
+        <div className="home-block">
+          <div className="row-heading">
+            <div>
+              <h2>Every Time We Met <span className="row-heart">♥</span></h2>
+              <p>All the best events, streaming as our own web series. Tap a season to watch its episodes.</p>
+            </div>
+          </div>
+          <div className="series-grid">
+            {series.map((s) => (
+              <button key={s.id} className="series-card" onClick={() => setOpenSeries(s)}>
+                <div className={`series-poster series-accent-${s.accent}`}>
+                  <span className="series-season">{s.season} · {s.years}</span>
+                  <h3>{s.name}</h3>
+                  <span className="series-years">{s.episodes.length} episode{s.episodes.length > 1 ? 's' : ''}</span>
+                </div>
+                <div className="series-body">
+                  <p className="series-tagline">&ldquo;{s.tagline}&rdquo;</p>
+                  <div className="series-meta">
+                    <span className="series-count">{s.episodes.length} Episodes</span>
+                    <span className="series-open"><Play size={13} fill="currentColor" /> View episodes</span>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="home-block">
+          <div className="row-heading">
+            <div>
+              <h2>Special Moments <span className="row-heart">♥</span></h2>
+              <p>All our first times — the ones we will tell our grandkids about.</p>
+            </div>
+          </div>
+          <div className="firsts-grid">
+            {firstMoments.map((f) => (
+              <div key={f.title} className="first-card">
+                <h3>{f.title}</h3>
+                <div className="first-when"><span>{f.date}</span><span>·</span><span>{f.place}</span>{f.placeGuess && <span className="guess-tag">to confirm</span>}</div>
+                <p>{f.brief}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="home-block">
+          <div className="row-heading">
+            <div>
+              <h2>Adventure</h2>
+              <p>Out there, together — our trips and great escapes.</p>
+            </div>
+          </div>
+          <div className="adventure-grid">
+            {adventureEpisodes.map((e) => (
+              <div key={`${e.seriesId}-${e.n}`} className="adventure-card">
+                <div className={`adventure-thumb series-accent-${e.accent}`}>
+                  <span className="ep-badge">EP {e.n}</span>
+                  <span>{e.seriesName}</span>
+                </div>
+                <div className="adventure-body">
+                  <h3>{e.title}</h3>
+                  <div className="episode-meta">
+                    <span className="ep-place"><MapPin size={11} /> {e.place}</span>
+                    {e.placeGuess && <span className="guess-tag">to confirm</span>}
+                    <span>{e.date}</span>
+                  </div>
+                  <p>{e.brief}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="home-block">
+          <div className="row-heading">
+            <div>
+              <h2>Just Us <span className="row-heart">♥</span></h2>
+              <p>The places where we really spent time together — what each one means to us.</p>
+            </div>
+          </div>
+          <div className="places-grid">
+            {placeBriefs.map((pl) => (
+              <div key={pl.place} className="place-card">
+                <span className="place-pin">📍</span>
+                <h3>{pl.place} {pl.placeGuess && <span className="guess-tag">to confirm</span>}</h3>
+                <div className="place-tagline">{pl.tagline}</div>
+                <p>{pl.brief}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {homeRows.map((row) => <ContentRow key={row.title} row={row} onSelect={onSelect} onFavourite={onFavourite} favourites={favourites} />)}
         <div className="story-cta">
           <div className="story-cta-glow" />
           <div>
@@ -167,7 +263,60 @@ function HomePage({ featured, onSelect, onNavigate, onStory, onFavourite, favour
           <button className="button button-outline" onClick={() => onNavigate('story')}>View timeline <ArrowRight size={16} /></button>
         </div>
       </section>
+      {openSeries && <SeriesModal s={openSeries} onClose={() => setOpenSeries(null)} />}
     </>
+  );
+}
+
+const ADVENTURE_PICKS = new Set([
+  'articleship-adventures:3',
+  'articleship-adventures:4',
+  'mountain-escape:1',
+  'mountain-escape:2',
+  'birthday-getaway:1',
+  'birthday-getaway:2',
+]);
+
+const adventureEpisodes = series.flatMap((s) =>
+  s.episodes
+    .filter((e) => ADVENTURE_PICKS.has(`${s.id}:${e.n}`))
+    .map((e) => ({ ...e, seriesId: s.id, seriesName: s.name, accent: s.accent }))
+);
+
+function SeriesModal({ s, onClose }: { s: Series; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="episode-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose} aria-label="Close"><X size={20} /></button>
+        <div className={`episode-modal-head series-accent-${s.accent}`}>
+          <span className="series-season">{s.season} · {s.years}</span>
+          <h2>{s.name}</h2>
+          <p>&ldquo;{s.tagline}&rdquo;</p>
+        </div>
+        <div className="episode-list">
+          {s.episodes.map((e) => (
+            <div key={e.n} className="episode-row">
+              <div className="episode-num">{e.n}</div>
+              <div>
+                <h4>{e.title}</h4>
+                <div className="episode-meta">
+                  <span className="ep-place"><MapPin size={11} /> {e.place}</span>
+                  {e.placeGuess && <span className="guess-tag">place to confirm</span>}
+                  <span>{e.date}</span>
+                </div>
+                <p>{e.brief}</p>
+                <div className="episode-photos-note">♥ Photos & videos of this day — coming soon ♥</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 

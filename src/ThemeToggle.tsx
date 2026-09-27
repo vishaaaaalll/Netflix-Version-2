@@ -1,63 +1,61 @@
 import { useEffect, useRef, useState } from 'react';
-import { Sun, Moon, Monitor, Check } from 'lucide-react';
+import { Palette, Check } from 'lucide-react';
 
-type ThemeMode = 'light' | 'dark' | 'system';
+export type ThemeName = 'rose' | 'lavender' | 'sage' | 'ocean' | 'cocoa';
 
 const STORAGE_KEY = 'ournetflix-theme';
-const THEME_COLOR = { dark: '#171114', light: '#faf5ef' };
+const CLASS_PREFIX = 'theme-';
+const THEME_COLOR: Record<ThemeName, string> = {
+  rose: '#faf5ef',
+  lavender: '#f7f3fc',
+  sage: '#f5f7f0',
+  ocean: '#0e1622',
+  cocoa: '#171114',
+};
 
-function getStoredMode(): ThemeMode {
+const THEMES: { value: ThemeName; label: string; swatches: [string, string, string] }[] = [
+  { value: 'rose', label: 'Rose Ivory', swatches: ['#faf5ef', '#c2496b', '#c9a24b'] },
+  { value: 'lavender', label: 'Lavender Haze', swatches: ['#f7f3fc', '#9b6bc4', '#c9a24b'] },
+  { value: 'sage', label: 'Sage Meadow', swatches: ['#f5f7f0', '#6f9a7e', '#c9a24b'] },
+  { value: 'ocean', label: 'Deep Ocean', swatches: ['#0e1622', '#7fb3e8', '#d4af7a'] },
+  { value: 'cocoa', label: 'Midnight Cocoa', swatches: ['#171114', '#e08aa0', '#d9b45f'] },
+];
+
+function getStoredTheme(): ThemeName {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === 'light' || stored === 'dark' || stored === 'system') return stored;
+    if (stored === 'rose' || stored === 'lavender' || stored === 'sage' || stored === 'ocean' || stored === 'cocoa')
+      return stored;
+    // Migrate the old light/dark/system values.
+    if (stored === 'dark') return 'cocoa';
+    if (stored === 'light') return 'rose';
+    if (stored === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'cocoa';
   } catch {
     /* localStorage unavailable */
   }
-  return 'system';
+  return 'rose';
 }
 
-function systemPrefersDark() {
-  return typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
-function applyTheme(mode: ThemeMode) {
-  const dark = mode === 'dark' || (mode === 'system' && systemPrefersDark());
+export function applyTheme(theme: ThemeName) {
   const root = document.documentElement;
-  root.classList.toggle('dark', dark);
-  root.classList.toggle('light', !dark);
-  document
-    .querySelector('meta[name="theme-color"]')
-    ?.setAttribute('content', dark ? THEME_COLOR.dark : THEME_COLOR.light);
+  for (const { value } of THEMES) root.classList.remove(CLASS_PREFIX + value);
+  root.classList.add(CLASS_PREFIX + theme);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLOR[theme]);
 }
-
-const OPTIONS: { value: ThemeMode; label: string; Icon: typeof Sun }[] = [
-  { value: 'light', label: 'Light', Icon: Sun },
-  { value: 'dark', label: 'Dark', Icon: Moon },
-  { value: 'system', label: 'System', Icon: Monitor },
-];
 
 export function ThemeToggle() {
-  const [mode, setMode] = useState<ThemeMode>(getStoredMode);
+  const [theme, setTheme] = useState<ThemeName>(getStoredTheme);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    applyTheme(mode);
+    applyTheme(theme);
     try {
-      localStorage.setItem(STORAGE_KEY, mode);
+      localStorage.setItem(STORAGE_KEY, theme);
     } catch {
       /* ignore write failures */
     }
-  }, [mode]);
-
-  // Follow OS changes live while in System mode.
-  useEffect(() => {
-    if (mode !== 'system') return;
-    const query = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = () => applyTheme('system');
-    query.addEventListener('change', handler);
-    return () => query.removeEventListener('change', handler);
-  }, [mode]);
+  }, [theme]);
 
   // Close the menu on outside click or Escape.
   useEffect(() => {
@@ -76,8 +74,7 @@ export function ThemeToggle() {
     };
   }, [open]);
 
-  const active = OPTIONS.find((option) => option.value === mode) ?? OPTIONS[2];
-  const ActiveIcon = active.Icon;
+  const active = THEMES.find((t) => t.value === theme) ?? THEMES[0];
 
   return (
     <div className="theme-toggle" ref={ref}>
@@ -88,24 +85,29 @@ export function ThemeToggle() {
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
-        <ActiveIcon size={19} />
+        <Palette size={19} />
       </button>
       {open && (
-        <div className="theme-menu" role="menu" aria-label="Appearance">
-          <span className="theme-menu-title">Appearance</span>
-          {OPTIONS.map(({ value, label, Icon }) => (
+        <div className="theme-menu" role="menu" aria-label="Theme">
+          <span className="theme-menu-title">Theme</span>
+          {THEMES.map(({ value, label, swatches }) => (
             <button
               key={value}
               role="menuitemradio"
-              aria-checked={mode === value}
-              className={mode === value ? 'active' : ''}
+              aria-checked={theme === value}
+              className={theme === value ? 'active' : ''}
               onClick={() => {
-                setMode(value);
+                setTheme(value);
                 setOpen(false);
               }}
             >
-              <Icon size={16} /> {label}
-              {mode === value && (
+              <span className="swatches" aria-hidden="true">
+                {swatches.map((color) => (
+                  <i key={color} style={{ background: color }} />
+                ))}
+              </span>
+              {label}
+              {theme === value && (
                 <span className="check">
                   <Check size={15} />
                 </span>
