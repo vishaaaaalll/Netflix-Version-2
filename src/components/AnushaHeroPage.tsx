@@ -1,12 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
-import { Heart, Play, Sparkles } from 'lucide-react';
+import { Heart, Sparkles } from 'lucide-react';
 
 const BASE = import.meta.env.BASE_URL;
 const BG = '#e41613';
+const LOOK_KEY = 'ournetflix-anusha-look';
 
 /** 8 compass frames in clockwise order starting east; index = round(angle/45) mod 8 */
 const DIR_FRAMES = ['right', 'down-right', 'down', 'down-left', 'left', 'up-left', 'up', 'up-right'];
 const ALL_FRAMES = ['center', ...DIR_FRAMES];
+
+const LOOKS = [
+  { id: 'classic', name: 'Classic', tag: 'the original' },
+  { id: 'festive', name: 'Festive', tag: 'navratri nights' },
+  { id: 'rose', name: 'Rose Day', tag: 'café date' },
+];
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -25,12 +32,28 @@ function lerpAngle(a: number, b: number, t: number): number {
   return a + d * t;
 }
 
-export default function AnushaHeroPage({ onNavigate }: { onNavigate: (section: string) => void }) {
+export default function AnushaHeroPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const frameCache = useRef(new Map<string, HTMLImageElement>());
+  const [look, setLook] = useState(() => {
+    try {
+      const saved = localStorage.getItem(LOOK_KEY);
+      return LOOKS.some((l) => l.id === saved) ? (saved as string) : 'classic';
+    } catch {
+      return 'classic';
+    }
+  });
   const [ready, setReady] = useState(false);
   const [hintVisible, setHintVisible] = useState(true);
+  const lookRef = useRef(look);
+  lookRef.current = look;
+
+  const pickLook = (id: string) => {
+    setLook(id);
+    try { localStorage.setItem(LOOK_KEY, id); } catch { /* private mode */ }
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -43,8 +66,10 @@ export default function AnushaHeroPage({ onNavigate }: { onNavigate: (section: s
 
     let raf = 0;
     let destroyed = false;
-    const frames = new Map<string, HTMLImageElement>();
     let shown = '__none__';
+
+    const key = (frame: string) => `${lookRef.current}/${frame}`;
+    const frameImg = (frame: string) => frameCache.current.get(key(frame));
 
     // Tracked pointer + smoothed values
     const pointer = { x: window.innerWidth / 2, y: window.innerHeight * 0.4, active: false };
@@ -54,14 +79,15 @@ export default function AnushaHeroPage({ onNavigate }: { onNavigate: (section: s
     const ring = { x: pointer.x, y: pointer.y };
     let ringHover = false;
 
-    const drawFrame = (name: string) => {
-      if (shown === name) return;
-      const img = frames.get(name);
+    const drawFrame = (frame: string) => {
+      if (shown === key(frame)) return;
+      const img = frameImg(frame);
       if (!img) return;
-      shown = name;
+      shown = key(frame);
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const cw = canvas.clientWidth;
       const ch = canvas.clientHeight;
+      if (cw === 0 || ch === 0) return;
       if (canvas.width !== Math.round(cw * dpr) || canvas.height !== Math.round(ch * dpr)) {
         canvas.width = Math.round(cw * dpr);
         canvas.height = Math.round(ch * dpr);
@@ -135,32 +161,22 @@ export default function AnushaHeroPage({ onNavigate }: { onNavigate: (section: s
       }
     };
 
-    const onResize = () => {
-      shown = '__none__'; // force redraw at new size
-      const cw = canvas.clientWidth;
-      const ch = canvas.clientHeight;
-      if (cw > 0 && ch > 0) {
-        // redraw current frame immediately so resize never shows a blank
-        const img = frames.get(shown === '__none__' ? 'center' : shown) ?? frames.get('center');
-        if (img) {
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
-          canvas.width = Math.round(cw * dpr);
-          canvas.height = Math.round(ch * dpr);
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-          const dw = img.naturalWidth * scale;
-          const dh = img.naturalHeight * scale;
-          ctx.fillStyle = BG;
-          ctx.fillRect(0, 0, cw, ch);
-          ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
-        }
-      }
-    };
+    const onResize = () => { shown = '__none__'; };
 
-    Promise.all(ALL_FRAMES.map((n) => loadImage(`${BASE}images/anusha-hero/${n}.webp`).then((img) => frames.set(n, img))))
+    // Preload this look's 9 frames (cached across switches), then start.
+    setReady(false);
+    const needed = ALL_FRAMES.filter((f) => !frameCache.current.has(`${lookRef.current}/${f}`));
+    Promise.all(
+      needed.map((f) =>
+        loadImage(`${BASE}images/anusha-hero/${lookRef.current}/${f}.webp`).then((img) =>
+          frameCache.current.set(`${lookRef.current}/${f}`, img)
+        )
+      )
+    )
       .then(() => {
         if (destroyed) return;
         setReady(true);
+        shown = '__none__';
         drawFrame('center');
         raf = requestAnimationFrame(tick);
       })
@@ -182,12 +198,14 @@ export default function AnushaHeroPage({ onNavigate }: { onNavigate: (section: s
       window.removeEventListener('mouseover', onOver);
       window.removeEventListener('resize', onResize);
     };
-  }, []);
+  }, [look]);
 
   useEffect(() => {
     const t = window.setTimeout(() => setHintVisible(false), 7000);
     return () => window.clearTimeout(t);
   }, []);
+
+  const activeLook = LOOKS.find((l) => l.id === look) ?? LOOKS[0];
 
   return (
     <section className="ah-hero" aria-label="Anusha — interactive portrait">
@@ -204,6 +222,23 @@ export default function AnushaHeroPage({ onNavigate }: { onNavigate: (section: s
       <div ref={dotRef} className="ah-cursor-dot" aria-hidden="true" />
       <div ref={ringRef} className="ah-cursor-ring" aria-hidden="true" />
 
+      {/* look switcher */}
+      <div className="ah-looks" role="group" aria-label="Choose her look">
+        <span className="ah-looks-label"><Sparkles size={13} /> her looks</span>
+        {LOOKS.map((l) => (
+          <button
+            key={l.id}
+            className={`ah-look ${l.id === look ? 'active' : ''}`}
+            onClick={() => pickLook(l.id)}
+            aria-pressed={l.id === look}
+            title={`${l.name} — ${l.tag}`}
+          >
+            <img src={`${BASE}images/anusha-hero/${l.id}/center.webp`} alt={l.name} />
+            <span>{l.name}</span>
+          </button>
+        ))}
+      </div>
+
       {/* copy */}
       <div className="ah-copy">
         <p className="ah-eyebrow"><Sparkles size={14} /> Hi, I&rsquo;m</p>
@@ -212,14 +247,6 @@ export default function AnushaHeroPage({ onNavigate }: { onNavigate: (section: s
           The main character of my favourite story. Four years of us — and she&rsquo;s
           still the best thing on every screen. Move your cursor… she&rsquo;s watching you.
         </p>
-        <div className="ah-actions">
-          <button className="ah-btn ah-btn-solid" onClick={() => onNavigate('story')}>
-            <Play size={16} /> Our Story
-          </button>
-          <button className="ah-btn ah-btn-glass" onClick={() => onNavigate('play')}>
-            <Heart size={16} /> Poke Vishal
-          </button>
-        </div>
       </div>
 
       {hintVisible && ready && (
@@ -227,7 +254,7 @@ export default function AnushaHeroPage({ onNavigate }: { onNavigate: (section: s
           <Heart size={13} fill="currentColor" /> move your cursor — she follows it
         </div>
       )}
-      {!ready && <div className="ah-loading">getting her ready…</div>}
+      {!ready && <div className="ah-loading">{activeLook.name}… getting her ready…</div>}
     </section>
   );
 }
