@@ -10,9 +10,9 @@ const DIR_FRAMES = ['right', 'down-right', 'down', 'down-left', 'left', 'up-left
 const ALL_FRAMES = ['center', ...DIR_FRAMES];
 
 const LOOKS = [
-  { id: 'classic', name: 'Classic', tag: 'the original' },
-  { id: 'festive', name: 'Festive', tag: 'navratri nights' },
-  { id: 'rose', name: 'Rose Day', tag: 'café date' },
+  { id: 'classic', name: 'Classic', tag: 'the original', focus: 0.5 },
+  { id: 'festive', name: 'Festive', tag: 'navratri nights', focus: 0.5 },
+  { id: 'rose', name: 'Rose Day', tag: 'café date', focus: 0.34 },
 ];
 
 function loadImage(src: string): Promise<HTMLImageElement> {
@@ -93,13 +93,19 @@ export default function AnushaHeroPage() {
         canvas.height = Math.round(ch * dpr);
       }
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      // cover-fit, character stays centered
+      // cover-fit, anchored on the look's face point (fixes tall portrait frames
+      // on landscape screens: keeps her face in view instead of cropping it away)
+      const lookCfg = LOOKS.find((l) => l.id === lookRef.current);
+      const focus = lookCfg ? lookCfg.focus : 0.5;
       const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
       const dw = img.naturalWidth * scale;
       const dh = img.naturalHeight * scale;
+      const dx = (cw - dw) / 2;
+      let dy = ch / 2 - focus * dh;
+      dy = Math.min(0, Math.max(ch - dh, dy)); // never reveal edges
       ctx.fillStyle = BG;
       ctx.fillRect(0, 0, cw, ch);
-      ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      ctx.drawImage(img, dx, dy, dw, dh);
     };
 
     const onMove = (x: number, y: number) => {
@@ -222,23 +228,6 @@ export default function AnushaHeroPage() {
       <div ref={dotRef} className="ah-cursor-dot" aria-hidden="true" />
       <div ref={ringRef} className="ah-cursor-ring" aria-hidden="true" />
 
-      {/* look switcher */}
-      <div className="ah-looks" role="group" aria-label="Choose her look">
-        <span className="ah-looks-label"><Sparkles size={13} /> her looks</span>
-        {LOOKS.map((l) => (
-          <button
-            key={l.id}
-            className={`ah-look ${l.id === look ? 'active' : ''}`}
-            onClick={() => pickLook(l.id)}
-            aria-pressed={l.id === look}
-            title={`${l.name} — ${l.tag}`}
-          >
-            <img src={`${BASE}images/anusha-hero/${l.id}/center.webp`} alt={l.name} />
-            <span>{l.name}</span>
-          </button>
-        ))}
-      </div>
-
       {/* copy */}
       <div className="ah-copy">
         <p className="ah-eyebrow"><Sparkles size={14} /> Hi, I&rsquo;m</p>
@@ -247,6 +236,23 @@ export default function AnushaHeroPage() {
           The main character of my favourite story. Four years of us — and she&rsquo;s
           still the best thing on every screen. Move your cursor… she&rsquo;s watching you.
         </p>
+
+        {/* look switcher */}
+        <div className="ah-looks" role="group" aria-label="Choose her look">
+          <span className="ah-looks-label"><Sparkles size={13} /> her looks</span>
+          {LOOKS.map((l) => (
+            <button
+              key={l.id}
+              className={`ah-look ${l.id === look ? 'active' : ''}`}
+              onClick={() => pickLook(l.id)}
+              aria-pressed={l.id === look}
+              title={`${l.name} — ${l.tag}`}
+            >
+              <img src={`${BASE}images/anusha-hero/${l.id}/center.webp`} alt={l.name} />
+              <span>{l.name}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {hintVisible && ready && (

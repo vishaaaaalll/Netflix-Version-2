@@ -1233,12 +1233,19 @@ html.theme-cocoa .orig-leaflet .leaflet-tile-pane, html.theme-ocean .orig-leafle
 .ah-hero {
   position: relative;
   min-height: 100svh;
+  box-sizing: border-box;
+  /* full-bleed under the sticky nav so bottom-anchored content never gets cut */
+  margin-top: -76px;
+  padding-top: 76px;
   background: #e41613;
   overflow: hidden;
   cursor: none;
 }
 @media (hover: none), (pointer: coarse) {
   .ah-hero { cursor: auto; }
+}
+@media (max-width: 640px) {
+  .ah-hero { margin-top: -66px; padding-top: 66px; }
 }
 .ah-canvas {
   position: absolute;
@@ -1346,16 +1353,20 @@ html.theme-cocoa .orig-leaflet .leaflet-tile-pane, html.theme-ocean .orig-leafle
   animation: ah-hint-in 0.6s ease both;
   white-space: nowrap;
 }
-/* look switcher */
+/* look switcher — sits under the bio, never on her face */
 .ah-looks {
-  position: absolute; z-index: 4;
-  top: 92px; right: clamp(20px, 4vw, 56px);
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 14px; border-radius: 999px;
+  position: static;
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 22px;
+  padding: 10px 16px 10px 14px; border-radius: 999px;
   background: rgba(0, 0, 0, 0.28);
   border: 1px solid rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  animation: ah-hint-in 0.6s ease both;
+  animation: ah-fade-up 0.6s ease both;
+}
+@keyframes ah-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .ah-looks-label {
   display: inline-flex; align-items: center; gap: 5px;
@@ -1399,7 +1410,7 @@ html.theme-cocoa .orig-leaflet .leaflet-tile-pane, html.theme-ocean .orig-leafle
   .ah-name { font-size: 72px; }
   .ah-bio { font-size: 14.5px; max-width: none; }
   .ah-hint { top: 84px; font-size: 12.5px; }
-  .ah-looks { top: 142px; right: 16px; padding: 8px 10px; gap: 8px; }
+  .ah-looks { margin-top: 16px; margin-left: 54px; padding: 8px 12px; gap: 8px; }
   .ah-looks-label { display: none; }
   .ah-look img { width: 38px; height: 38px; }
   .ah-look span { font-size: 9.5px; }
