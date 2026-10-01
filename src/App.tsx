@@ -13,6 +13,8 @@ import { ThemeToggle } from './ThemeToggle';
 import { LoginGate, LogoutButton, isAuthenticated, logout } from './LoginGate';
 import CoupleAvatars from './components/CoupleAvatars';
 import PlaygroundPage from './components/PlaygroundPage';
+import OriginalsPage from './components/OriginalsPage';
+import AnushaHeroPage from './components/AnushaHeroPage';
 
 function App() {
   const [authed, setAuthed] = useState(isAuthenticated());
@@ -58,7 +60,7 @@ function App() {
   return (
     <div className="app-shell">
       <Navbar active={activeSection} onNavigate={goTo} searchOpen={searchOpen} setSearchOpen={setSearchOpen} mobileMenu={mobileMenu} setMobileMenu={setMobileMenu} onLogoClick={handleLogoClick} />
-      {(activeSection === 'home' || activeSection === 'story') && <CoupleAvatars />}
+      {(activeSection === 'home' || activeSection === 'story' || activeSection === 'originals') && <CoupleAvatars />}
       <main>
         {activeSection === 'home' && <HomePage featured={featuredMemory} onSelect={setSelected} onNavigate={goTo} onStory={() => setStoryOpen(true)} onFavourite={toggleFavourite} favourites={favourites} />}
         {activeSection === 'story' && <StoryPage onSelect={setSelected} onNavigate={goTo} />}
@@ -66,6 +68,8 @@ function App() {
         {activeSection === 'videos' && <VideosPage onSelect={setSelected} />}
         {activeSection === 'favourites' && <FavouritesPage memories={favouriteMemories} onSelect={setSelected} onFavourite={toggleFavourite} />}
         {activeSection === 'play' && <PlaygroundPage />}
+        {activeSection === 'originals' && <OriginalsPage />}
+        {activeSection === 'anusha' && <AnushaHeroPage onNavigate={goTo} />}
       </main>
       <footer className="site-footer">
         <div>
@@ -96,7 +100,7 @@ function App() {
 function Navbar({ active, onNavigate, searchOpen, setSearchOpen, mobileMenu, setMobileMenu, onLogoClick }: {
   active: string; onNavigate: (section: string) => void; searchOpen: boolean; setSearchOpen: (open: boolean) => void; mobileMenu: boolean; setMobileMenu: (open: boolean) => void; onLogoClick: () => void;
 }) {
-  const links = [['home', 'Home'], ['story', 'Our Story'], ['photos', 'Photos'], ['videos', 'Videos'], ['favourites', 'Favourites'], ['play', 'Playground']];
+  const links = [['home', 'Home'], ['story', 'Our Story'], ['originals', 'Originals'], ['photos', 'Photos'], ['videos', 'Videos'], ['favourites', 'Favourites'], ['play', 'Playground'], ['anusha', 'Anusha']];
   return (
     <header className={`nav-shell ${active !== 'home' ? 'nav-solid' : ''}`}>
       <div className="nav-inner">
